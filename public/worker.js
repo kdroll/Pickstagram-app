@@ -11,5 +11,10 @@ function goToRegisterPage() {
 function login() {
 	var username = document.getElementById('username').value;
 	var password = document.getElementById('password').value;
-	window.location = 'main.html';
+
+	if (username == "" || password == ""){
+		alert("Please enter a username and password");
+	} else {
+		window.location = 'main.html';
+	}
 }
