@@ -8,7 +8,13 @@
 	"dependencies": {
 		"express": "4.13.x",
 		"cfenv": "1.0.x",
-		"mysql": "*"
+		"pg" : "*",
+		"body-parser" : "*",
+		"passport" : "*",
+		"passport-local" : "*",
+		"cookie-parser" : "*",
+		"express-session" : "*",
+		"bcrypt-nodejs" : "*"
 	},
 	"repository": {},
 	"engines": {

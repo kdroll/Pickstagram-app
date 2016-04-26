@@ -15,15 +15,15 @@
   	
     <h1>Register Page</h1>
     
-	<form name="registerForm">
+	<form name="registerForm" method="post">
     	Username:
     	
-  		<input type="text" id="username"><br><br>
+  		<input type="text" id="username" name="username"><br><br>
   		
   		Password:
-  		<input type="password" id="password"><br><br>
+  		<input type="password" id="password" name="password"><br><br>
   		
-  		<input onClick="register()" type="button" value="Create Account"><br><br>
+  		<input onClick="register()" type="submit" value="Create Account"><br><br>
     </form>
     
   </body>

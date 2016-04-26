@@ -1,20 +1,192 @@
 <!DOCTYPE html>
 <html>
-	<script type="text/javascript" src=worker.js></script>
-
-    <head>
+  <head>
     <title>Pickstagram</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="stylesheets/style.css">
+    <style type='text/css'>
+        #sheet {
+            border:1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="stylesheets/main.css">
   </head>
-
-
   <body>
-  	
-    <h1>Main Page</h1>
+    <canvas id="sheet" width="400" height="400"></canvas>
+    <script type='text/javascript'>
+/*eslint-env browser */
+var context = document.getElementById('sheet').getContext("2d");
+var canvas = document.getElementById('sheet');
+context = canvas.getContext("2d");
+context.strokeStyle = "#000000";
+context.fillStyle = "#FFFFFF";
+context.fillRect(0,0,400,400);
+context.lineJoin = "round";
+context.lineWidth = 5;
 
+var clickX = [];
+var clickY = [];
+var clickDrag = [];
+var clickColor = [];
+var paint;
+
+/**
+ * Add information where the user clicked at.
+ * @param {number} x
+ * @param {number} y
+ * @return {boolean} dragging
+ */
+function addClick(x, y, dragging) {
+    clickX.push(x);
+    clickY.push(y);
+    clickDrag.push(dragging);
+}
+
+/**
+ * Draw the newly added point.
+ * @return {void}
+ */
+function drawNew() {
+    var i = clickX.length - 1;
+    if (!clickDrag[i]) {
+        if (clickX.length == 0) {
+            context.beginPath();
+            context.moveTo(clickX[i], clickY[i]);
+            context.stroke();
+        } else {
+            context.closePath();
+
+            context.beginPath();
+            context.moveTo(clickX[i], clickY[i]);
+            context.stroke();
+        }
+    } else {
+        context.lineTo(clickX[i], clickY[i]);
+        context.stroke();
+    }
+}
+
+function mouseDownEventHandler(e) {
+    paint = true;
+    var x = e.pageX - canvas.offsetLeft;
+    var y = e.pageY - canvas.offsetTop;
+    if (paint) {
+        addClick(x, y, false);
+        drawNew();
+    }
+}
+
+function touchstartEventHandler(e) {
+    paint = true;
+    if (paint) {
+        addClick(e.touches[0].pageX - canvas.offsetLeft, e.touches[0].pageY - canvas.offsetTop, false);
+        drawNew();
+    }
+}
+
+function mouseUpEventHandler(e) {
+    context.closePath();
+    paint = false;
+}
+
+function mouseMoveEventHandler(e) {
+    var x = e.pageX - canvas.offsetLeft;
+    var y = e.pageY - canvas.offsetTop;
+    if (paint) {
+        addClick(x, y, true);
+        drawNew();
+    }
+}
+
+function touchMoveEventHandler(e) {
+    if (paint) {
+        addClick(e.touches[0].pageX - canvas.offsetLeft, e.touches[0].pageY - canvas.offsetTop, true);
+        drawNew();
+    }
+}
+
+document.ontouchmove = function(e){ e.preventDefault(); };
+
+function setUpHandler(isMouseandNotTouch, detectEvent) {
+    removeRaceHandlers();
+    if (isMouseandNotTouch) {
+        canvas.addEventListener('mouseup', mouseUpEventHandler);
+        canvas.addEventListener('mousemove', mouseMoveEventHandler);
+        canvas.addEventListener('mousedown', mouseDownEventHandler);
+        mouseDownEventHandler(detectEvent);
+    } else {
+        canvas.addEventListener('touchstart', touchstartEventHandler);
+        canvas.addEventListener('touchmove', touchMoveEventHandler);
+        canvas.addEventListener('touchend', mouseUpEventHandler);
+        touchstartEventHandler(detectEvent);
+    }
+}
+
+function mouseWins(e) {
+    setUpHandler(true, e);
+}
+
+function touchWins(e) {
+    setUpHandler(false, e);
+}
+
+function removeRaceHandlers() {
+    canvas.removeEventListener('mousedown', mouseWins);
+    canvas.removeEventListener('touchstart', touchWins);
+}
+
+function changeColor(color) {
+	if (color == "black") {
+		context.strokeStyle = "#000000";
+	} else if (color == "brown") {
+		context.strokeStyle = "#993300";
+	} else if (color == "red") {
+		context.strokeStyle = "#FF0000";
+	} else if (color == "orange") {
+		context.strokeStyle = "#FF8C1A";
+	} else if (color == "yellow") {
+		context.strokeStyle = "#FFFF00";
+	} else if (color == "green") {
+		context.strokeStyle = "#009900";
+	} else if (color == "blue") {
+		context.strokeStyle = "#0000FF";
+	} else if (color == "lightblue") {
+		context.strokeStyle = "#00CCFF";
+	} else if (color == "purple") {
+		context.strokeStyle = "#990099";
+	} else if (color == "pink") {
+		context.strokeStyle = "#FF99CC";
+	} else if (color == "white") {
+		context.strokeStyle = "#FFFFFF";
+	}
+}
+
+function exportDrawing() {
+	//var data = canvas.toDataURL();
+	//alert(data + " size=" + data.length);
+	//var xhttp = new XMLHttpRequest();
+	//xhttp.open("GET", "/register.html", true);
+	//xhttp.send();
+	//alert(xhttp.responseText);
+	alert("This button doesn't do anything yet.")
+}
+
+canvas.addEventListener('mousedown', mouseWins);
+canvas.addEventListener('touchstart', touchWins);
+    </script>
+     <br><br>
+<p>Pick a color!</p>
+<form>
+	<input name="color" id="black" type="radio" onclick=changeColor("black") checked>Black</input>
+	<input name="color" id="brown" type="radio" onclick=changeColor("brown")>Brown</input>
+	<input name="color" id="red" type="radio" onclick=changeColor("red")>Red</input> <br>
+	<input name="color" id="orange" type="radio" onclick=changeColor("orange")>Orange</input>
+	<input name="color" id="yellow" type="radio" onclick=changeColor("yellow")>Yellow</input>
+	<input name="color" id="green" type="radio" onclick=changeColor("green")>Green</input> <br>
+	<input name="color" id="blue" type="radio" onclick=changeColor("blue")>Blue</input>
+	<input name="color" id="lightblue" type="radio" onclick=changeColor("lightblue")>Light Blue</input>
+	<input name="color" id="purple" type="radio" onclick=changeColor("purple")>Purple</input> <br>
+	<input name="color" id="pink" type="radio" onclick=changeColor("pink")>Pink</input>
+	<input name="color" id="white" type="radio" onclick=changeColor("white")>White</input> <br><br>
+</form>
+<button id="export" type="button" onclick=exportDrawing()>Post Drawing</button> <br>
   </body>
-
 </html>

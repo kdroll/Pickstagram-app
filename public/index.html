@@ -14,15 +14,15 @@
   <body>
   	
     <h1>Welcome!</h1>
-    <form name="submitForm">
+    <form name="submitForm" method="post">
     	Username:
     	
-  		<input type="text" id="username"><br><br>
+  		<input type="text" id="username" name="username"><br><br>
   		
   		Password:
-  		<input type="password" id="password"><br><br>
+  		<input type="password" id="password" name="password"><br><br>
   		
-  		<input onClick="login()" type="button" value="Login"><br><br>
+  		<input onClick="login()" type="submit" value="Login"><br><br>
   		New? Create an account by clicking the button below!<br><br>
   		<input onClick="goToRegisterPage()" type="button" value="Register"><br><br>
     </form>
