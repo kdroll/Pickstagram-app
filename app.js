@@ -3,6 +3,20 @@ var isLoggedIn = false;
 var bodyParser = require('body-parser');
 var pg = require('pg');
 var conString = "postgres://quzvfygu:Utl4ROEQ6eeqfldf-9gm95PPwhV4R4BU@jumbo.db.elephantsql.com:5432/quzvfygu";
+var bcrypt = require('bcrypt-nodejs');
+
+var salt;
+bcrypt.genSalt(10, function(error, result) {
+	salt = result;
+});
+var hash;
+bcrypt.hash('password', salt, null, function(error, result) {
+	hash = result;
+	bcrypt.compare('password', hash, function(error, result) {
+		console.log(hash);
+		console.log(result);
+	});
+});
 
 //this initializes a connection pool
 //it will keep idle connections open for a (configurable) 30 seconds
@@ -53,6 +67,10 @@ app.post('/register.html', function(request, response) {
 	var client = new pg.Client(conString);
 	var usernamefixed = request.body.username;
 	var passwordfixed = request.body.password;
+	bcrypt.hash(passwordfixed, salt, null, function(error, result) {
+		passwordfixed = result;
+	});
+	
 	var usernameExists = 0;
 	client.connect(function(err) {
 		if(err) {
@@ -83,6 +101,10 @@ app.post('/login.html', function(request, response) {
 	var client = new pg.Client(conString);
 	var usernamefixed = request.body.username;
 	var passwordfixed = request.body.password;
+	bcrypt.hash(passwordfixed, salt, null, function(error, result) {
+		passwordfixed = result;
+	});
+	
 	var usernameExists = 0;
 	client.connect(function(err) {
 		if(err) {
