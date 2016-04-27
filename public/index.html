@@ -3,6 +3,7 @@
 	<script type="text/javascript" src=worker.js></script>
 
     <head>
+	<link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700' rel='stylesheet' type='text/css'>
     <title>Pickstagram</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,21 +13,14 @@
 
 
   <body>
-  	
-    <h1>Welcome!</h1>
-    <form name="submitForm" method="post">
-    	Username:
-    	
-  		<input type="text" id="username" name="username"><br><br>
-  		
-  		Password:
-  		<input type="password" id="password" name="password"><br><br>
-  		
-  		<input onClick="login()" type="submit" value="Login"><br><br>
-  		New? Create an account by clicking the button below!<br><br>
-  		<input onClick="goToRegisterPage()" type="button" value="Register"><br><br>
-    </form>
-    
+  	<upLeftTitle>Pickstagram</upLeftTitle>
+    <h1>Welcome to Pickstagram!</h1> <br>
+    <p>Check out the live-feed of pictures:</p><br>
+    <button type="button" style="font-family: 'Alegreya Sans', sans-serif;" onclick=goToFeedPage()>Go To Feed</button> <br><br>
+    <p>Click here to register your account!</p><br>
+    <button type="button" style="font-family: 'Alegreya Sans', sans-serif;" onclick=goToRegisterPage()>Register</button> <br><br>
+    <p>If you already have an account, click here to log in!</p> <br>
+    <button type="button" style="font-family: 'Alegreya Sans', sans-serif;" onclick=goToLoginPage()>Log In</button>
     
   </body>
 

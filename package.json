@@ -10,10 +10,6 @@
 		"cfenv": "1.0.x",
 		"pg" : "*",
 		"body-parser" : "*",
-		"passport" : "*",
-		"passport-local" : "*",
-		"cookie-parser" : "*",
-		"express-session" : "*",
 		"bcrypt-nodejs" : "*"
 	},
 	"repository": {},

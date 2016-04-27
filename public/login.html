@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<script type="text/javascript" src=worker.js></script>
+
+    <head>
+    	<link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700' rel='stylesheet' type='text/css'>
+    <title>Pickstagram</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/style.css">
+  </head>
+
+
+  <body>
+  	<upLeftTitle>Pickstagram</upLeftTitle>
+    <script>
+    	/*eslint-env browser */
+  		if (sessionStorage.username.length > 0) {
+  			window.location = 'main.html';
+  		}
+  	</script>
+  	
+    <h1>Welcome!</h1>
+    <form name="submitForm" method="post">
+    	Username:
+    	
+  		<input type="text" id="username" name="username"><br><br>
+  		
+  		Password:
+  		<input type="password" id="password" name="password"><br><br>
+  		
+  		<input onClick="login()" style="font-family: 'Alegreya Sans', sans-serif;" type="submit" value="Login"><br><br>
+  		New? Create an account by clicking the button below!<br><br>
+  		<input onClick="goToRegisterPage()" style="font-family: 'Alegreya Sans', sans-serif;" type="button" value="Register"><br><br>
+    </form>
+    
+    
+  </body>
+
+</html>

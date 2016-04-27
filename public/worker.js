@@ -1,13 +1,16 @@
 /*eslint-env browser */
-var accountsArray = [];
 
 function goToRegisterPage() {
-	//console.log("TEST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-	//var submittedName = document.getElementById('name').value;
-	//alert("Hello, " + submittedName + "!");
-	
 	window.location = 'register.html';
+}
+function goToLoginPage() {
+	window.location = 'login.html';
+}
+function goToFeedPage() {
+	window.location = 'feed.html';
+}
+function goToMainPage() {
+	window.location = 'main.html';
 }
 
 function login() {
@@ -17,7 +20,9 @@ function login() {
 	if (username == "" || password == ""){
 		alert("Please enter a username and password");
 	} else {
-		window.location = 'main.html';
+		sessionStorage.username = username;
+
+		window.location = 'feed.html';
 	}
 }
 
@@ -25,10 +30,7 @@ function register() {
 	var username = document.getElementById('username').value;
 	var password = document.getElementById('password').value;
 	
-	var concat = username + "/" + password;
-	accountsArray[accountsArray.length] = concat;
+	sessionStorage.username = username;
 	
-	alert(accountsArray[0]);
-	
-	window.location = 'main.html';
+	window.location = 'feed.html';
 }

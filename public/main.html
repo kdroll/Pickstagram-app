@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+  	<link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700' rel='stylesheet' type='text/css'>
     <title>Pickstagram</title>
     <style type='text/css'>
         #sheet {
@@ -10,11 +11,14 @@
     <link rel="stylesheet" href="stylesheets/main.css">
   </head>
   <body>
+  	<upLeftTitle>Pickstagram</upLeftTitle>
+  	<p id="user"></p>
     <canvas id="sheet" width="400" height="400"></canvas>
     <script type='text/javascript'>
 /*eslint-env browser */
 var context = document.getElementById('sheet').getContext("2d");
 var canvas = document.getElementById('sheet');
+document.getElementById("user").innerHTML = "Logged in as: " + sessionStorage.username;
 context = canvas.getContext("2d");
 context.strokeStyle = "#000000";
 context.fillStyle = "#FFFFFF";
@@ -22,11 +26,25 @@ context.fillRect(0,0,400,400);
 context.lineJoin = "round";
 context.lineWidth = 5;
 
+if (sessionStorage.username == undefined) {
+	window.location = 'login.html';
+}
+
 var clickX = [];
 var clickY = [];
 var clickDrag = [];
-var clickColor = [];
 var paint;
+
+function pgFormatDate(date) {
+  /* Via http://stackoverflow.com/questions/3605214/javascript-add-leading-zeroes-to-date */
+  function zeroPad(d) {
+    return ("0" + d).slice(-2);
+  }
+
+  var parsed = new Date(date);
+
+  return [parsed.getUTCFullYear(), zeroPad(parsed.getMonth() + 1), zeroPad(parsed.getDate()), zeroPad(parsed.getHours()), zeroPad(parsed.getMinutes()), zeroPad(parsed.getSeconds())].join(" ");
+}
 
 /**
  * Add information where the user clicked at.
@@ -159,14 +177,26 @@ function changeColor(color) {
 	}
 }
 
+function addZero(dateString) {
+	if (dateString <= 9) {
+		dateString = "0" + dateString;
+	}
+	return dateString;
+}
+
 function exportDrawing() {
-	//var data = canvas.toDataURL();
-	//alert(data + " size=" + data.length);
-	//var xhttp = new XMLHttpRequest();
-	//xhttp.open("GET", "/register.html", true);
-	//xhttp.send();
-	//alert(xhttp.responseText);
-	alert("This button doesn't do anything yet.")
+	var data = canvas.toDataURL("image/png");
+	// alert(data);
+	//window.open(data, "_blank");
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("POST", "/main.html", true);
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	//alert(sessionStorage.username);
+	var date = new Date();
+	var dateString = addZero(date.getFullYear()) + " " + addZero(date.getMonth() + 1) + " " + addZero(date.getDate()) + " " + addZero(date.getHours()) + " " + addZero(date.getMinutes()) + " " + addZero(date.getSeconds());
+
+	xhttp.send("data=" + data + "&username=" + sessionStorage.username + "&date=" + dateString);
+	window.location ='feed.html';
 }
 
 canvas.addEventListener('mousedown', mouseWins);
@@ -187,6 +217,6 @@ canvas.addEventListener('touchstart', touchWins);
 	<input name="color" id="pink" type="radio" onclick=changeColor("pink")>Pink</input>
 	<input name="color" id="white" type="radio" onclick=changeColor("white")>White</input> <br><br>
 </form>
-<button id="export" type="button" onclick=exportDrawing()>Post Drawing</button> <br>
+<button id="export" style="font-family: 'Alegreya Sans', sans-serif;" type="button" onclick=exportDrawing()>Post Drawing</button> <br>
   </body>
 </html>

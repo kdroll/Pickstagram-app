@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src=worker.js></script>
+  <head>
+  	<link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700' rel='stylesheet' type='text/css'>
+    <title>Pickstagram</title>
+    <style type='text/css'>
+        canvas {
+            border:1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="stylesheets/main.css">
+  </head>
+  <body>
+  	<upLeftTitle>Pickstagram</upLeftTitle>
+  	<input onClick="goToMainPage()" style="font-family: 'Alegreya Sans', sans-serif; position: absolute; top: 40px; right: 35px; width: 300px; padding: 10px;" type="submit" value="Create Drawing"><br><br>
+  	<p id="author1"></p>
+    <canvas id="sheet1" width="400" height="400"></canvas><br><br><br>
+    <p id="author2"></p>
+    <canvas id="sheet2" width="400" height="400"></canvas><br><br><br>
+    <p id="author3"></p>
+    <canvas id="sheet3" width="400" height="400"></canvas><br><br><br>
+    <script type='text/javascript'>
+	/*eslint-env browser */
+
+
+	function exportDrawing() {
+		var data = canvas.toDataURL("image/png");
+		//alert(data);
+		//window.open(data, "_blank");
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", "/main.html", true);
+		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		//alert(sessionStorage.username);
+		var date = Date();
+
+		xhttp.send("data=" + data + "&username=" + sessionStorage.username + "&date=" + date);
+		//alert("This button doesn't do anything yet.");
+	}
+
+    </script>
+	<script type='text/javascript'>
+		/*eslint-env browser */
+		function loadCanvas(dataURL, sheetNum) {
+			dataURL = dataURL.replace(/ /g, "+");
+        	var canvas = document.getElementById(sheetNum);
+        	var context = canvas.getContext('2d');
+	
+	        // load image from data url
+	        var imageObj = new Image();
+	        // alert(dataURL);
+			imageObj.src = dataURL;
+			//console.log(dataURL);
+	        imageObj.onload = function() {
+	          context.drawImage(imageObj, 0, 0);
+	        };
+	
+	        
+		}
+	      
+	      // make ajax call to get image data url
+	      var request = new XMLHttpRequest();
+	      request.open('POST', '/feed.html', true);
+	      request.onreadystatechange = function() {
+	        // Makes sure the document is ready to parse.
+	        if(request.readyState == 4) {
+	          // Makes sure it's found the file.
+	          if(request.status == 200) {
+	          	var myArr = JSON.parse(request.responseText);
+	            //alert(myArr.author);
+	            loadCanvas(myArr.data, "sheet1");
+	            var dateString = myArr.date.substring(5,10).replace(/ /g, "-") + "@" + myArr.date.substring(11,16).replace(/ /g,":");
+	            document.getElementById("author1").innerHTML = "By: " + myArr.author + " on " + dateString;
+	            //alert("REQUEST TEXT: " + JSON.stringify(myArr));
+	          }
+	        }
+	      };
+	      request.send();
+	      
+	      var request2 = new XMLHttpRequest();
+	      request2.open('POST', '/feed2.html', true);
+	      request2.onreadystatechange = function() {
+	        // Makes sure the document is ready to parse.
+	        if(request2.readyState == 4) {
+	          // Makes sure it's found the file.
+	          if(request2.status == 200) {
+	          	var myArr = JSON.parse(request2.responseText);
+	            //alert(myArr.author);
+	            loadCanvas(myArr.data, "sheet2");
+	            var dateString = myArr.date.substring(5,10).replace(/ /g, "-") + "@" + myArr.date.substring(11,16).replace(/ /g,":");
+	            document.getElementById("author2").innerHTML = "By: " + myArr.author + " on " + dateString;
+	            //alert("REQUEST TEXT: " + JSON.stringify(myArr));
+	          }
+	        }
+	      };
+	      request2.send();
+	      
+	      var request3 = new XMLHttpRequest();
+	      request3.open('POST', '/feed3.html', true);
+	      request3.onreadystatechange = function() {
+	        // Makes sure the document is ready to parse.
+	        if(request3.readyState == 4) {
+	          // Makes sure it's found the file.
+	          if(request3.status == 200) {
+	          	var myArr = JSON.parse(request3.responseText);
+	            //alert(myArr.author);
+	            loadCanvas(myArr.data, "sheet3");
+	            var dateString = myArr.date.substring(5,10).replace(/ /g, "-") + "@" + myArr.date.substring(11,16).replace(/ /g,":");
+	            document.getElementById("author3").innerHTML = "By: " + myArr.author + " on " + dateString;
+	            //alert("REQUEST TEXT: " + JSON.stringify(myArr));
+	          }
+	        }
+	      };
+	      request3.send();
+	</script>
+	</body>
+</html>
+		
